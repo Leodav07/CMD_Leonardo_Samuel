@@ -28,9 +28,7 @@ public class GUIConsola extends JFrame {
         textArea.setBackground(Color.BLACK);
         textArea.setForeground(Color.WHITE);
         textArea.setCaretColor(Color.WHITE);
-        textArea.append("Microsoft Windows");
-        textArea.append("\nLeonardo y Samu Samu Systems. All rights reseverd.\n\n");
-
+       
         textArea.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -81,7 +79,7 @@ public class GUIConsola extends JFrame {
                 }
             }
         });
-        textArea.setText(prompt);
+        textArea.setText("Microsoft Windows\nLeonardo y Samu Samu Systems. All rights reserved.\n\n" + prompt);
 
         JScrollPane scrollPane = new JScrollPane(textArea);
         add(scrollPane);
