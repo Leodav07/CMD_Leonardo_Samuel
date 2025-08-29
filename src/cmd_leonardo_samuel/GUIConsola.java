@@ -1,3 +1,4 @@
+package cmd_leonardo_samuel;
 
 import cmd_leonardo_samuel.CMDFunciones;
 import javax.swing.*;
@@ -12,14 +13,16 @@ public class GUIConsola extends JFrame {
 
     private JTextArea textArea;
     private CMDFunciones mf = new CMDFunciones();
-    private String prompt = System.getProperty("user.dir") + (">");
+    public String prompt;
+    private File directorio;
 
     public GUIConsola() {
         setTitle("Administrador - Command Prompt");
         setSize(800, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-
+        directorio = new File(System.getProperty("user.dir"));
+        prompt = directorio.getAbsolutePath() + (">");
         textArea = new JTextArea();
         textArea.setFont(new Font("Consolas", Font.PLAIN, 14));
         textArea.setBackground(Color.BLACK);
@@ -60,8 +63,8 @@ public class GUIConsola extends JFrame {
 
             switch (comando.toLowerCase()) {
                 case ("mkdir"):
-                    mf.setFile(argumento);
-                    if (mf.nuevaCarpeta()) {
+
+                    if (mf.nuevaCarpeta(directorio, argumento)) {
                         textArea.append("\nDirectorio creado exitosamente.");
                     } else {
                         textArea.append("\nOcurrio un error al crear el directorio.");
@@ -69,8 +72,8 @@ public class GUIConsola extends JFrame {
                     break;
 
                 case ("mfile"):
-                    mf.setFile(argumento);
-                    if (mf.crearArchivo()) {
+
+                    if (mf.crearArchivo(directorio, argumento)) {
                         textArea.append("\nArchivo creado exitosamente.");
                     } else {
                         textArea.append("\nOcurrio un error al crear el directorio.");
@@ -90,10 +93,67 @@ public class GUIConsola extends JFrame {
                     }
 
                     break;
-                    
-                case("cd"):
-                    
+
+                case ("cd"):
+                    File nuevaDir = mf.cambiarCarpeta(directorio, argumento);
+                    if (!nuevaDir.equals(directorio)) {
+                        directorio = nuevaDir;
+                        prompt = directorio.getAbsolutePath() + "> ";
+                    } else {
+                        textArea.append("\nOcurrió un error al cambiar de carpeta.");
+                    }
+
                     break;
+
+                case ("..."):
+                    mf.setFile(directorio.getAbsolutePath());
+                    File carpetaAnterior = mf.regresarCarpeta();
+                    if (carpetaAnterior != null) {
+                        directorio = carpetaAnterior;
+                        mf.setFile(directorio.getAbsolutePath());
+                        prompt = directorio.getAbsolutePath() + ">";
+
+                    }
+                    break;
+
+                case ("dir"):
+                    textArea.append(mf.mostrarDir(directorio));
+                    break;
+
+                case ("date"):
+                    textArea.append("\n" + mf.getDate());
+                    break;
+
+                case ("time"):
+                    textArea.append("\n" + mf.getTime());
+                    break;
+
+                case ("wr"):
+                    String[] arg = argumento.split("\\s+", 2);
+                    if (arg.length >= 2) {
+                        String nombreArch = arg[0];
+                        String msg = arg[1];
+                        File archEscribir = new File(directorio, nombreArch);
+                        mf.escribirWr(archEscribir, msg);
+                        textArea.append("\nTexto escrito en el archivo.");
+                    } else {
+                        textArea.append("\nOcurrio un error, formato incorrecto.");
+                    }
+                    break;
+
+                case ("rd"):
+                    File archivoLeer = new File(directorio, argumento);
+
+                    String contenido = mf.leerFile(archivoLeer);
+                    if (!contenido.isEmpty()) {
+                        textArea.append("\n-----------\n");
+                        textArea.append("\n" + contenido);
+                        textArea.append("\n-----------\n");
+                    } else {
+                        textArea.append("\nEl archivo está vacío");
+                    }
+                    break;
+
                 case ("exit"):
                     textArea.append("\nCerrando...");
                     System.exit(0);
@@ -116,7 +176,13 @@ public class GUIConsola extends JFrame {
 
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new GUIConsola());
+    public void setPrompt(String promptNuevo) {
+        prompt = promptNuevo;
     }
+
+    public void setDirectorio(File directorioNuevo) {
+        directorio = directorioNuevo;
+    }
+
+    
 }
