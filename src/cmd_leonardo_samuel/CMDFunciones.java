@@ -100,13 +100,13 @@ public class CMDFunciones {
     }
 
     public String getDate() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/YYYY");
-        return sdf.format(Calendar.getInstance());
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        return sdf.format(Calendar.getInstance().getTime());
     }
 
     public String getTime() {
         LocalTime hora = LocalTime.now();
-        return String.valueOf(hora.getHour() + ": " + hora.getMinute());
+        return String.valueOf(hora.getHour() + ":" + hora.getMinute());
     }
 
     public void escribirWr(File txt, String msg) throws IOException {

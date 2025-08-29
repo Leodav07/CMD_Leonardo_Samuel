@@ -121,7 +121,7 @@ public class GUIConsola extends JFrame {
                     break;
 
                 case ("date"):
-                    textArea.append("\n" + mf.getDate());
+                      textArea.append("\n" + mf.getDate());
                     break;
 
                 case ("time"):
