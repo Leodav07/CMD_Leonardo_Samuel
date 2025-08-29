@@ -4,7 +4,7 @@ import java.awt.*;
 public class GUIConsola extends JFrame {
 
     public GUIConsola() {
-        setTitle("Consola CMD");
+        setTitle("Administrator - Command Prompt");
         setSize(800, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
