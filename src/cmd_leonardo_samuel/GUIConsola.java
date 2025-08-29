@@ -28,23 +28,59 @@ public class GUIConsola extends JFrame {
         textArea.setBackground(Color.BLACK);
         textArea.setForeground(Color.WHITE);
         textArea.setCaretColor(Color.WHITE);
+        textArea.append("Microsoft Windows");
+        textArea.append("\nLeonardo y Samu Samu Systems. All rights reseverd.\n\n");
 
         textArea.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     e.consume();
+
                     String fullText = textArea.getText();
                     int lastPromptIndex = fullText.lastIndexOf(prompt);
-                    String command = fullText.substring(lastPromptIndex + prompt.length()).trim();
+                    if (lastPromptIndex != -1) {
+                        String command = fullText.substring(lastPromptIndex + prompt.length()).trim();
+                        if (!command.isEmpty()) {
+                            textArea.append("\n");
+                            comandos(command);
+                        }
 
-                    comandos(command);
+                        textArea.append("\n" + prompt);
 
-                    textArea.append("\n" + prompt);
+                        textArea.setCaretPosition(textArea.getText().length());
+                    }
+                } else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+                    String fullText = textArea.getText();
+                    int lastPromptIndex = fullText.lastIndexOf(prompt);
+                    int caretPosition = textArea.getCaretPosition();
+
+                    if (caretPosition <= lastPromptIndex + prompt.length()) {
+                        e.consume();
+                    }
+                } else if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_UP) {
+                    String fullText = textArea.getText();
+                    int lastPromptIndex = fullText.lastIndexOf(prompt);
+                    int caretPosition = textArea.getCaretPosition();
+
+                    if (caretPosition <= lastPromptIndex + prompt.length()) {
+                        e.consume();
+                    }
+                }
+            }
+
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+                String fullText = textArea.getText();
+                int lastPromptIndex = fullText.lastIndexOf(prompt);
+                int caretPosition = textArea.getCaretPosition();
+
+                if (caretPosition < lastPromptIndex + prompt.length()) {
+                    textArea.setCaretPosition(fullText.length());
                 }
             }
         });
-
         textArea.setText(prompt);
 
         JScrollPane scrollPane = new JScrollPane(textArea);
@@ -121,7 +157,7 @@ public class GUIConsola extends JFrame {
                     break;
 
                 case ("date"):
-                      textArea.append("\n" + mf.getDate());
+                    textArea.append("\n" + mf.getDate());
                     break;
 
                 case ("time"):
@@ -184,5 +220,4 @@ public class GUIConsola extends JFrame {
         directorio = directorioNuevo;
     }
 
-    
 }
